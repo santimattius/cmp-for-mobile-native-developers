@@ -1,4 +1,4 @@
-# KMP Compose Gradle Skeleton
+# CMP for Mobile Native Developers 
 
 This is a Kotlin Multiplatform project targeting Android, iOS.
 
