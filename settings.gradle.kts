@@ -1,4 +1,4 @@
-rootProject.name = "cmp-for-mobile-native-developers "
+rootProject.name = "cmp-for-mobile-native-developers"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":data")

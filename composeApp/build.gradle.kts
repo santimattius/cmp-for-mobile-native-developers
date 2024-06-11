@@ -1,5 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -70,6 +68,7 @@ kotlin {
                 api(libs.koin.core)
                 api(libs.koin.compose)
 
+                implementation(projects.data)
             }
         }
 
@@ -124,5 +123,8 @@ android {
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
+}
+dependencies {
+    implementation(libs.androidx.ui.android)
 }
 
