@@ -29,9 +29,7 @@ class CharacterRepository(
      */
     suspend fun fetch(): Result<Unit> {
         return network.all().fold(onSuccess = {
-            it.forEach { network ->
-                local.insert(network.asDomainModel())
-            }
+            local.insertAll(characters = it.toDomainsModels())
             Result.success(Unit)
         }, onFailure = {
             Result.failure(it)

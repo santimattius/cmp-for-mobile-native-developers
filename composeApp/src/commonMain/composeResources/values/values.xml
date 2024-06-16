@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">My awesome app</string>
-    <string name="title">Some title</string>
+    <string name="app_name">Rick and Morty</string>
+    <string name="title">Rick and Morty</string>
 </resources>

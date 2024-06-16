@@ -16,81 +16,81 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
-import cmp_for_mobile_native_developers.composeapp.generated.resources.Res
-import cmp_for_mobile_native_developers.composeapp.generated.resources.app_name
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.santimattius.kmp.domain.Character
-import com.santimattius.kmp.skeleton.core.ui.components.AppBar
-import com.santimattius.kmp.skeleton.core.ui.components.AppBarIcon
-import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
+import com.santimattius.kmp.skeleton.core.ui.components.Center
+import com.santimattius.kmp.skeleton.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.skeleton.core.ui.components.NetworkImage
-import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
-object HomeScreen : Screen {
 
-    @Composable
-    override fun Content() {
-        val screenModel = getScreenModel<HomeScreenModel>()
-        HomeScreenContent(screenModel)
-    }
+@OptIn(KoinExperimentalAPI::class)
+@Composable
+fun HomeScreenRoute() {
+    val viewModel = koinViewModel<HomeViewModel>()
+    HomeScreenContent(
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+        viewModel = viewModel,
+        onClick = {},
+        onFavorite = viewModel::addToFavorites,
+    )
 }
 
 @Composable
 fun HomeScreenContent(
-    screenModel: HomeScreenModel,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel,
     onClick: (Character) -> Unit = {},
     onFavorite: (Character) -> Unit = {},
-    goToFavorite: () -> Unit = {}
 ) {
-    val state by screenModel.state.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    when {
+        state.isLoading -> {
+            LoadingIndicator()
+        }
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(Res.string.app_name),
-                actions = {
-                    AppBarIcon(
-                        navIcon = AppBarIconModel(
-                            icon = Icons.Default.Favorite,
-                            contentDescription = "Favorite",
-                            action = goToFavorite
-                        )
-                    )
-                }
+        state.data.isEmpty() -> {
+            Center {
+                Text(
+                    text = "There is no favorite content",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+        }
+
+        else -> {
+            GridOfCharacters(
+                modifier = modifier,
+                characters = state.data,
+                onClick = onClick,
+                onFavorite = onFavorite
             )
         }
-    ) { padding ->
-        GridOfCharacters(
-            characters = state.data,
-            padding = padding,
-            onClick = onClick,
-            onFavorite = onFavorite
-        )
     }
 }
 
 @Composable
 private fun GridOfCharacters(
+    modifier: Modifier = Modifier,
     characters: List<Character>,
-    padding: PaddingValues,
     onClick: (Character) -> Unit = {},
     onFavorite: (Character) -> Unit = {},
 ) {
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(2.dp),
+        columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(2.dp),
-        modifier = Modifier.padding(padding)
+        modifier = modifier
     ) {
 
         items(characters, key = { it.id }) { character ->

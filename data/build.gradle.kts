@@ -52,6 +52,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.android.driver)
             implementation(libs.koin.android)
+            implementation(libs.androidx.startup.runtime)
         }
 
         iosMain.dependencies {

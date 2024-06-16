@@ -36,8 +36,6 @@ kotlin {
             api(libs.androidx.appcompat)
             api(libs.androidx.core.ktx)
 
-
-
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
 
@@ -57,16 +55,15 @@ kotlin {
 
                 implementation(libs.stately.common)
                 implementation(libs.voyager.navigator)
-                implementation(libs.voyager.koin)
 
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.serialization.kotlinx.json)
-                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.lifecycle.viewmodel.compose)
+                implementation(libs.lifecycle.runtime.compose)
+                implementation(libs.navigation.compose)
+                implementation(libs.androidx.lifecycle.runtime)
 
                 api(libs.koin.core)
                 api(libs.koin.compose)
+                api(libs.koin.composeViewModel)
 
                 implementation(projects.data)
             }

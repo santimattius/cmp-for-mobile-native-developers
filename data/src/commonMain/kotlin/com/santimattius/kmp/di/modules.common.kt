@@ -26,7 +26,12 @@ val sharedModule = module {
     single<CharacterNetworkDataSource> { KtorCharacterNetworkDataSource(get<HttpClient>()) }
     single<CharactersDatabase> { createDatabase(get<SqlDriver>()) }
     single<CharacterLocalDataSource> { SQLDelightCharacterLocalDataSource(db = get<CharactersDatabase>()) }
-    single { CharacterRepository(local = get<CharacterLocalDataSource>(), network = get<CharacterNetworkDataSource>()) }
+    single {
+        CharacterRepository(
+            local = get<CharacterLocalDataSource>(),
+            network = get<CharacterNetworkDataSource>()
+        )
+    }
 
     factory<GetAllCharacters> { GetAllCharacters(get<CharacterRepository>()) }
     factory<FindCharacterById> { FindCharacterById(get<CharacterRepository>()) }
@@ -37,3 +42,5 @@ val sharedModule = module {
 }
 
 expect val platformModule: Module
+
+fun dataModule() = listOf(sharedModule, coreModule, platformModule)

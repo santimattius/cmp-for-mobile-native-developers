@@ -1,56 +1,61 @@
 package com.santimattius.kmp.skeleton.features.home
 
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.compose.runtime.Stable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.santimattius.kmp.domain.AddToFavorite
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.domain.GetAllCharacters
 import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-
+@Stable
 data class HomeUiState(
     val isLoading: Boolean = false,
     val hasError: Boolean = false,
     val data: List<Character> = emptyList(),
 )
 
-class HomeScreenModel(
+class HomeViewModel(
     getAllCharacters: GetAllCharacters,
     private val refreshCharacters: RefreshCharacters,
     private val addToFavorite: AddToFavorite,
     private val removeFromFavorite: RemoveFromFavorites,
-) : StateScreenModel<HomeUiState>(HomeUiState()) {
+) : ViewModel() {
 
-    var uiState: StateFlow<HomeUiState> = getAllCharacters().map {
-        HomeUiState(
-            isLoading = false,
-            hasError = false,
-            data = it
+    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
+//    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+     val uiState: StateFlow<HomeUiState> = getAllCharacters()
+        .map {
+            HomeUiState(
+                isLoading = false,
+                hasError = false,
+                data = it
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = HomeUiState(isLoading = true)
         )
-    }.stateIn(
-        scope = screenModelScope,
-        started = SharingStarted.WhileSubscribed(1000L),
-        initialValue = HomeUiState(isLoading = true)
-    )
 
     init {
         refresh()
     }
 
     private fun refresh() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             refreshCharacters.invoke()
         }
     }
 
     fun addToFavorites(character: Character) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (character.isFavorite) {
                 removeFromFavorite(character.id)
             } else {

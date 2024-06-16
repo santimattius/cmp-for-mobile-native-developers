@@ -12,19 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
+typealias ComposableFactory = @Composable () -> Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     title: String = "",
-    navigationIcon: @Composable () -> Unit = { },
+    navIcon: AppBarIconModel? = null,
     containerColor: Color = MaterialTheme.colorScheme.primary,
     titleContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
         title = { Text(text = title) },
-        navigationIcon = navigationIcon,
+        navigationIcon = if (navIcon == null) {
+            composableFactory { }
+        } else {
+            composableFactory { AppBarIcon(navIcon) }
+        },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = containerColor,
             titleContentColor = titleContentColor,
@@ -42,7 +47,14 @@ internal fun AppBarIcon(navIcon: AppBarIconModel) {
     }
 }
 
-internal data class AppBarIconModel(
+fun composableFactory(create: @Composable () -> Unit): ComposableFactory {
+    val factory: @Composable () -> Unit = {
+        create()
+    }
+    return factory
+}
+
+data class AppBarIconModel(
     val icon: ImageVector,
     val contentDescription: String,
     val action: () -> Unit,

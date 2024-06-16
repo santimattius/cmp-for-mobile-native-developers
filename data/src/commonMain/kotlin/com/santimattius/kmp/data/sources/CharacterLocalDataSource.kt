@@ -11,5 +11,6 @@ interface CharacterLocalDataSource {
     suspend fun addToFavorite(id: Long): Result<Unit>
     suspend fun removeToFavorite(id: Long): Result<Unit>
     suspend fun insert(character: Character): Result<Unit>
+    suspend fun insertAll(characters: List<Character>): Result<Unit>
     suspend fun clear(): Result<Unit>
 }

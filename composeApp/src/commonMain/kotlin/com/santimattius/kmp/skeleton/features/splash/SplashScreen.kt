@@ -11,29 +11,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import cmp_for_mobile_native_developers.composeapp.generated.resources.Res
 import cmp_for_mobile_native_developers.composeapp.generated.resources.compose_multiplatform
-import com.santimattius.kmp.skeleton.features.home.HomeScreen
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-object SplashScreen : Screen {
-    @Composable
-    override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        SplashScreenContent {
-            navigator.replace(HomeScreen)
-        }
-    }
-}
-
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SplashScreenContent(navigate: () -> Unit) {
+fun SplashScreen(navigate: () -> Unit) {
     val scale = remember {
         Animatable(0f)
     }
@@ -55,7 +39,7 @@ fun SplashScreenContent(navigate: () -> Unit) {
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-           painterResource(Res.drawable.compose_multiplatform),
+            painterResource(Res.drawable.compose_multiplatform),
             null
         )
     }

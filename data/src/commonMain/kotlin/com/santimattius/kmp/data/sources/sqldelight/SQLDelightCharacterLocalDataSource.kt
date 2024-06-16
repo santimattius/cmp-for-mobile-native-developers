@@ -56,6 +56,16 @@ internal class SQLDelightCharacterLocalDataSource(
         queries.insertCharacter(id, title, image)
     }
 
+    override suspend fun insertAll(characters: List<Character>): Result<Unit> = runCatching {
+        queries.transaction {
+            queries.deleteAll()
+            characters.forEach { character ->
+                val (id, title, image) = character
+                queries.insertCharacter(id, title, image)
+            }
+        }
+    }
+
     override suspend fun clear(): Result<Unit> = runCatching {
         queries.deleteAll()
     }
