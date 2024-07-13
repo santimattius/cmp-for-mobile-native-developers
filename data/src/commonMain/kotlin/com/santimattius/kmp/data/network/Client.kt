@@ -1,4 +1,4 @@
-package com.santimattius.kmp.skeleton.core.network
+package com.santimattius.kmp.data.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -12,8 +12,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-internal fun ktorHttpClient(baseUrl: String) = HttpClient {
-
+internal fun apiClient(baseUrl: String) = HttpClient {
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true

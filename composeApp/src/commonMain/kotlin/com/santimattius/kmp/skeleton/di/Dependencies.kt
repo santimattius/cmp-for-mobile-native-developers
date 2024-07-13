@@ -1,29 +1,24 @@
 package com.santimattius.kmp.skeleton.di
 
-import com.santimattius.kmp.skeleton.core.data.PictureRepository
-import com.santimattius.kmp.skeleton.core.network.ktorHttpClient
-import com.santimattius.kmp.skeleton.features.home.HomeScreenModel
-import org.koin.core.qualifier.qualifier
+import com.santimattius.kmp.di.dataModule
+import com.santimattius.kmp.skeleton.features.favorites.FavoritesViewModel
+import com.santimattius.kmp.skeleton.features.home.HomeViewModel
+import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val sharedModules = module {
-    single(qualifier(AppQualifiers.BaseUrl)) { "https://api-picture.onrender.com" }
-    single(qualifier(AppQualifiers.Client)) {
-        ktorHttpClient(
-            baseUrl = get(
-                qualifier = qualifier(
-                    AppQualifiers.BaseUrl
-                )
-            )
+val homeModule = module {
+    viewModel {
+        HomeViewModel(
+            getAllCharacters = get(),
+            refreshCharacters = get(),
+            addToFavorite = get(),
+            removeFromFavorite = get()
         )
     }
-
-    single { PictureRepository(get(qualifier(AppQualifiers.Client))) }
-}
-
-val homeModule = module {
-    factory { HomeScreenModel(repository = get()) }
+    viewModel {
+        FavoritesViewModel(characterRepository = get())
+    }
 }
 
 
-fun applicationModules() = listOf(sharedModules, homeModule)
+fun applicationModules() = listOf(homeModule) + dataModule()
