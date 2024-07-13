@@ -15,7 +15,7 @@ import com.santimattius.kmp.skeleton.core.ui.components.AppBar
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIcon
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
 import com.santimattius.kmp.skeleton.di.applicationModules
-import com.santimattius.kmp.skeleton.navigation.NavItem
+import com.santimattius.kmp.skeleton.navigation.Features
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
@@ -50,7 +50,7 @@ fun RootScreen(appState: AppState = rememberAppState()) {
                                 icon = Icons.Default.Favorite,
                                 contentDescription = "Favorite",
                                 action = {
-                                    appState.onNavItemClick(NavItem.Favorites)
+                                    appState.onNavItemClick(Features.Favorites)
                                 }
                             )
                         )

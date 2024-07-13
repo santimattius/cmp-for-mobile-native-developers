@@ -5,6 +5,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -27,14 +28,16 @@ class MainActivity : ComponentActivity() {
 fun StatusBar() {
     val view = LocalView.current
     val primaryColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f).toArgb()
+    val darkTheme = isSystemInDarkTheme()
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = primaryColor
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
 }
+
 @Preview
 @Composable
 fun AppAndroidPreview() {

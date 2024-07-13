@@ -15,10 +15,10 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavCommand.ContentType(Features.Splash).route
+        startDestination = Features.Splash.route
     ) {
         composable(
-            navCommand = NavCommand.ContentType(Features.Splash)
+            features = Features.Splash
         ) {
             SplashScreen {
                 with(navController) {
@@ -28,12 +28,12 @@ fun Navigation(
             }
         }
         composable(
-            navCommand = NavCommand.ContentType(Features.Home),
+            features = Features.Home,
         ) {
             HomeScreenRoute()
         }
         composable(
-            navCommand = NavCommand.ContentType(Features.Favorites),
+            features = Features.Favorites
         ) {
             FavoriteRoute()
         }
@@ -41,5 +41,5 @@ fun Navigation(
 }
 
 private fun NavController.navigate(route: Features) {
-    navigate(NavCommand.ContentType(route).route)
+    navigate(route.route)
 }

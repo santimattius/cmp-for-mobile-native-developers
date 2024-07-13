@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.santimattius.kmp.skeleton.navigation.Features
-import com.santimattius.kmp.skeleton.navigation.NavItem
 import com.santimattius.kmp.skeleton.navigation.navigatePoppingUpToStartDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -29,7 +28,7 @@ class AppState(
 ) {
 
     companion object {
-        val HOME_ROUTES = listOf(NavItem.Home.navCommand.route)
+        val HOME_ROUTES = listOf(Features.Home.route)
     }
 
     private val currentRoute: String
@@ -55,7 +54,7 @@ class AppState(
         }
     }
 
-    fun onNavItemClick(navItem: NavItem) {
-        navController.navigatePoppingUpToStartDestination(navItem.navCommand.route)
+    fun onNavItemClick(feature: Features) {
+        navController.navigatePoppingUpToStartDestination(feature.route)
     }
 }

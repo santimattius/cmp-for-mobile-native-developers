@@ -24,7 +24,7 @@ fun NavHostController.navigatePoppingUpToStartDestination(route: String) {
 }
 
 internal fun NavGraphBuilder.composable(
-    navCommand: NavCommand,
+    features: Features,
     enterTransition: AnimatedEnterTransition? = null,
     exitTransition: AnimatedExitTransition? = null,
     popEnterTransition: AnimatedEnterTransition? = enterTransition,
@@ -32,8 +32,7 @@ internal fun NavGraphBuilder.composable(
     content: @Composable (NavBackStackEntry) -> Unit,
 ) {
     composable(
-        route = navCommand.route,
-        arguments = navCommand.args,
+        route = features.route,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
         popEnterTransition = popEnterTransition,
