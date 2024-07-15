@@ -22,7 +22,7 @@ statelyCommon = "2.0.7"
 voyager = "1.0.0"
 coil= "3.0.0-alpha08"
 
-koin = "3.6.0-alpha3"
+koin = "3.6.0-wasm-alpha2"
 koinComposeMultiplatform = "1.2.0-Beta4"
 
 kotlinxCoroutinesAndroid = "1.8.1"
