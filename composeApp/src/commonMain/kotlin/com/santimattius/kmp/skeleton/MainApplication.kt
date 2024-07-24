@@ -26,8 +26,7 @@ fun MainApplication() {
         modules(applicationModules())
     }) {
         RootScreen()
-//        Navigator(SplashScreenVoyager)
-    }
+}
 }
 
 @Composable

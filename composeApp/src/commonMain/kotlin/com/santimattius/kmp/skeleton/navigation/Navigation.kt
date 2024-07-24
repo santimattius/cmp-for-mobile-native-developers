@@ -32,6 +32,7 @@ fun Navigation(
         ) {
             HomeScreenRoute()
         }
+
         composable(
             features = Features.Favorites
         ) {

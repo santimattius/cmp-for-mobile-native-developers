@@ -55,7 +55,6 @@ kotlin {
                 implementation(libs.coil.network)
 
                 implementation(libs.stately.common)
-                implementation(libs.voyager.navigator)
 
                 implementation(libs.lifecycle.viewmodel.compose)
                 implementation(libs.lifecycle.runtime.compose)

@@ -68,6 +68,7 @@ sqldelight {
     databases {
         create("CharactersDatabase") {
             packageName.set("com.santimattius.kmp")
+            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.2")
         }
     }
 

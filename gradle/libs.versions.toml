@@ -14,7 +14,7 @@ androidx-core-ktx = "1.13.1"
 compose = "1.6.8"
 compose-plugin = "1.6.11"
 
-lifecycleRuntime = "2.8.3"
+lifecycleRuntime = "2.8.4"
 lifecycleCompose = "2.8.0"
 navigationCompose = "2.8.0-dev1731"
 

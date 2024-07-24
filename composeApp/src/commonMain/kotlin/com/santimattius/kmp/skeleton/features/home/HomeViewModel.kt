@@ -8,7 +8,6 @@ import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.domain.GetAllCharacters
 import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -29,9 +28,7 @@ class HomeViewModel(
     private val removeFromFavorite: RemoveFromFavorites,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
-//    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-     val uiState: StateFlow<HomeUiState> = getAllCharacters()
+    val uiState: StateFlow<HomeUiState> = getAllCharacters()
         .map {
             HomeUiState(
                 isLoading = false,
