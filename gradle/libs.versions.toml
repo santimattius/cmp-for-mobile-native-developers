@@ -16,7 +16,7 @@ compose-plugin = "1.6.11"
 
 lifecycleRuntime = "2.8.4"
 lifecycleCompose = "2.8.0"
-navigationCompose = "2.8.0-dev1731"
+navigationCompose = "2.8.0-dev1747"
 
 statelyCommon = "2.0.7"
 voyager = "1.0.0"
