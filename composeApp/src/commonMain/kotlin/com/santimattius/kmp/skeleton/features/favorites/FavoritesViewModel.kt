@@ -1,12 +1,13 @@
 package com.santimattius.kmp.skeleton.features.favorites
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+
 import com.santimattius.kmp.data.CharacterRepository
 import com.santimattius.kmp.domain.Character
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class FavoritesViewModel(
     private val characterRepository: CharacterRepository,

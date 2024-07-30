@@ -56,10 +56,12 @@ kotlin {
 
                 implementation(libs.stately.common)
 
-                implementation(libs.lifecycle.viewmodel.compose)
                 implementation(libs.lifecycle.runtime.compose)
-                implementation(libs.navigation.compose)
                 implementation(libs.androidx.lifecycle.runtime)
+
+                implementation(libs.precompose.core)
+                implementation(libs.precompose.viewmodel)
+                implementation(libs.precompose.koin)
 
                 api(libs.koin.core)
                 api(libs.koin.compose)

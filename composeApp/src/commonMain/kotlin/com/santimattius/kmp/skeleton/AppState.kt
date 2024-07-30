@@ -3,19 +3,18 @@ package com.santimattius.kmp.skeleton
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.santimattius.kmp.skeleton.navigation.Features
-import com.santimattius.kmp.skeleton.navigation.navigatePoppingUpToStartDestination
 import kotlinx.coroutines.CoroutineScope
+import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.rememberNavigator
 
 @Composable
 fun rememberAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberNavController(),
+    navController: Navigator = rememberNavigator(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ): AppState = remember(scaffoldState, navController, coroutineScope) {
     AppState(scaffoldState, navController, coroutineScope)
@@ -23,7 +22,7 @@ fun rememberAppState(
 
 class AppState(
     val scaffoldState: ScaffoldState,
-    val navController: NavHostController,
+    val navController: Navigator,
     private val coroutineScope: CoroutineScope,
 ) {
 
@@ -32,7 +31,7 @@ class AppState(
     }
 
     private val currentRoute: String
-        @Composable get() = navController.currentBackStackEntryAsState().value?.destination?.route.orEmpty()
+        @Composable get() = navController.currentEntry.collectAsState(null).value?.route?.route.orEmpty()
 
 
     val showUpNavigation: Boolean
@@ -55,6 +54,6 @@ class AppState(
     }
 
     fun onNavItemClick(feature: Features) {
-        navController.navigatePoppingUpToStartDestination(feature.route)
+        navController.navigate(feature.route)
     }
 }

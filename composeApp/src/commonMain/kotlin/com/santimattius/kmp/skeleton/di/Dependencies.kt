@@ -3,11 +3,10 @@ package com.santimattius.kmp.skeleton.di
 import com.santimattius.kmp.di.dataModule
 import com.santimattius.kmp.skeleton.features.favorites.FavoritesViewModel
 import com.santimattius.kmp.skeleton.features.home.HomeViewModel
-import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val homeModule = module {
-    viewModel {
+    factory {
         HomeViewModel(
             getAllCharacters = get(),
             refreshCharacters = get(),
@@ -15,7 +14,7 @@ val homeModule = module {
             removeFromFavorite = get()
         )
     }
-    viewModel {
+    factory {
         FavoritesViewModel(characterRepository = get())
     }
 }

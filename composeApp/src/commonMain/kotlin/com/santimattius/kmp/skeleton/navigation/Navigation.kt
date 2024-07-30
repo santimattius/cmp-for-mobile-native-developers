@@ -1,24 +1,23 @@
 package com.santimattius.kmp.skeleton.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.santimattius.kmp.skeleton.features.favorites.FavoriteRoute
 import com.santimattius.kmp.skeleton.features.home.HomeScreenRoute
 import com.santimattius.kmp.skeleton.features.splash.SplashScreen
+import moe.tlaster.precompose.navigation.NavHost
+import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.rememberNavigator
 
 @Composable
 fun Navigation(
-    navController: NavHostController = rememberNavController(),
+    navController: Navigator = rememberNavigator(),
 ) {
     NavHost(
-        navController = navController,
-        startDestination = Features.Splash.route
+        navigator = navController,
+        initialRoute = Features.Splash.route
     ) {
-        composable(
-            features = Features.Splash
+        scene(
+            route = Features.Splash.route
         ) {
             SplashScreen {
                 with(navController) {
@@ -27,20 +26,16 @@ fun Navigation(
                 }
             }
         }
-        composable(
-            features = Features.Home,
+        scene(
+            route = Features.Home.route,
         ) {
             HomeScreenRoute()
         }
 
-        composable(
-            features = Features.Favorites
+        scene(
+            route = Features.Favorites.route
         ) {
             FavoriteRoute()
         }
     }
-}
-
-private fun NavController.navigate(route: Features) {
-    navigate(route.route)
 }

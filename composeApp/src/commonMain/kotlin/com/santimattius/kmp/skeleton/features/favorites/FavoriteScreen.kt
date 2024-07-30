@@ -31,13 +31,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
+import moe.tlaster.precompose.koin.koinViewModel
 
-@OptIn(KoinExperimentalAPI::class)
+
 @Composable
 fun FavoriteRoute() {
-    val viewModel = koinViewModel<FavoritesViewModel>()
+    val viewModel = koinViewModel(FavoritesViewModel::class)
     FavoritesScreen(
         viewModel = viewModel,
         onFavoriteClick = viewModel::addToFavorites,

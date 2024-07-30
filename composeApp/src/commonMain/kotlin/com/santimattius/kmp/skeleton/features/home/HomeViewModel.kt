@@ -1,8 +1,6 @@
 package com.santimattius.kmp.skeleton.features.home
 
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.santimattius.kmp.domain.AddToFavorite
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.domain.GetAllCharacters
@@ -13,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 @Stable
 data class HomeUiState(

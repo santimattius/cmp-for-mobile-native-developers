@@ -17,6 +17,7 @@ import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
 import com.santimattius.kmp.skeleton.di.applicationModules
 import com.santimattius.kmp.skeleton.navigation.Features
 import com.santimattius.kmp.skeleton.navigation.Navigation
+import moe.tlaster.precompose.PreComposeApp
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 
@@ -25,8 +26,10 @@ fun MainApplication() {
     KoinApplication(application = {
         modules(applicationModules())
     }) {
-        RootScreen()
-}
+        PreComposeApp {
+            RootScreen()
+        }
+    }
 }
 
 @Composable

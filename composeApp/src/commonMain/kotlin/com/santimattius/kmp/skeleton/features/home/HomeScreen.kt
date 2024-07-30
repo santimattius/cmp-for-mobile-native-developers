@@ -30,14 +30,11 @@ import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
 import com.santimattius.kmp.skeleton.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.skeleton.core.ui.components.NetworkImage
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
+import moe.tlaster.precompose.koin.koinViewModel
 
-
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreenRoute() {
-    val viewModel = koinViewModel<HomeViewModel>()
+    val viewModel = koinViewModel(HomeViewModel::class)
     HomeScreenContent(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
         viewModel = viewModel,
