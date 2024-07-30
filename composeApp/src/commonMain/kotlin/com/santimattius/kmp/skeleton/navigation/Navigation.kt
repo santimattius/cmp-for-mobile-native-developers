@@ -23,7 +23,7 @@ fun Navigation(
             SplashScreen {
                 with(navController) {
                     popBackStack()
-                    navigate(Features.Home)
+                    navigate(Features.Home.route)
                 }
             }
         }
