@@ -1,25 +1,25 @@
 package com.santimattius.kmp.skeleton.features.favorites
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.santimattius.kmp.data.CharacterRepository
 import com.santimattius.kmp.domain.Character
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class FavoritesViewModel(
+class FavoritesScreenModel(
     private val characterRepository: CharacterRepository,
-) : ViewModel() {
+) : StateScreenModel<Unit>(Unit) {
 
     var characters = characterRepository.allFavoritesCharacters.stateIn(
-        scope = viewModelScope,
+        scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(1000L),
         initialValue = emptyList()
     )
 
     fun addToFavorites(character: Character) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             if (character.isFavorite) {
                 characterRepository.removeFromFavorite(character.id)
             } else {

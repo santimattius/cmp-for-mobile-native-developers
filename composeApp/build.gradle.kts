@@ -56,14 +56,17 @@ kotlin {
 
                 implementation(libs.stately.common)
 
-                implementation(libs.lifecycle.viewmodel.compose)
                 implementation(libs.lifecycle.runtime.compose)
-                implementation(libs.navigation.compose)
+
                 implementation(libs.androidx.lifecycle.runtime)
 
                 api(libs.koin.core)
                 api(libs.koin.compose)
                 api(libs.koin.composeViewModel)
+
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.screenmodel)
+                implementation(libs.voyager.koin)
 
                 implementation(projects.data)
             }

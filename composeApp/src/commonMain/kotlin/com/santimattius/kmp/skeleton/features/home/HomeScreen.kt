@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,30 +28,62 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import cmp_for_mobile_native_developers.composeapp.generated.resources.Res
+import cmp_for_mobile_native_developers.composeapp.generated.resources.app_name
 import com.santimattius.kmp.domain.Character
+import com.santimattius.kmp.skeleton.core.ui.components.AppBar
+import com.santimattius.kmp.skeleton.core.ui.components.AppBarIcon
+import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
 import com.santimattius.kmp.skeleton.core.ui.components.Center
 import com.santimattius.kmp.skeleton.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.skeleton.core.ui.components.NetworkImage
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
+import com.santimattius.kmp.skeleton.features.favorites.FavoriteScreen
+import org.jetbrains.compose.resources.stringResource
 
 
-@OptIn(KoinExperimentalAPI::class)
-@Composable
-fun HomeScreenRoute() {
-    val viewModel = koinViewModel<HomeViewModel>()
-    HomeScreenContent(
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-        viewModel = viewModel,
-        onClick = {},
-        onFavorite = viewModel::addToFavorites,
-    )
+object HomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        Scaffold(
+            topBar = {
+                AppBar(
+                    title = stringResource(Res.string.app_name),
+                    actions = {
+                        AppBarIcon(
+                            navIcon = AppBarIconModel(
+                                icon = Icons.Default.Favorite,
+                                contentDescription = "Favorite",
+                                action = { navigator.push(FavoriteScreen) }
+                            )
+                        )
+                    }
+                )
+            }
+        ) { padding ->
+            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+                val viewModel = koinScreenModel<HomeScreenModel>()
+                HomeScreenContent(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+                    viewModel = viewModel,
+                    onClick = {},
+                    onFavorite = viewModel::addToFavorites,
+                )
+            }
+        }
+
+    }
 }
 
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel,
+    viewModel: HomeScreenModel,
     onClick: (Character) -> Unit = {},
     onFavorite: (Character) -> Unit = {},
 ) {

@@ -1,8 +1,8 @@
 package com.santimattius.kmp.skeleton.features.home
 
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.santimattius.kmp.domain.AddToFavorite
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.domain.GetAllCharacters
@@ -21,12 +21,12 @@ data class HomeUiState(
     val data: List<Character> = emptyList(),
 )
 
-class HomeViewModel(
+class HomeScreenModel(
     getAllCharacters: GetAllCharacters,
     private val refreshCharacters: RefreshCharacters,
     private val addToFavorite: AddToFavorite,
     private val removeFromFavorite: RemoveFromFavorites,
-) : ViewModel() {
+) : StateScreenModel<HomeUiState>(HomeUiState()) {
 
     val uiState: StateFlow<HomeUiState> = getAllCharacters()
         .map {
@@ -36,7 +36,7 @@ class HomeViewModel(
                 data = it
             )
         }.stateIn(
-            scope = viewModelScope,
+            scope = screenModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = HomeUiState(isLoading = true)
         )
@@ -46,13 +46,13 @@ class HomeViewModel(
     }
 
     private fun refresh() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             refreshCharacters.invoke()
         }
     }
 
     fun addToFavorites(character: Character) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             if (character.isFavorite) {
                 removeFromFavorite(character.id)
             } else {
