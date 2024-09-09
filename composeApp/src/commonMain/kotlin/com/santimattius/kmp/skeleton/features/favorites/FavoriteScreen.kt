@@ -32,9 +32,7 @@ import coil3.compose.AsyncImage
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun FavoriteRoute() {
     val viewModel = koinViewModel<FavoritesViewModel>()

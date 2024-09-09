@@ -3,7 +3,7 @@ package com.santimattius.kmp.skeleton.di
 import com.santimattius.kmp.di.dataModule
 import com.santimattius.kmp.skeleton.features.favorites.FavoritesViewModel
 import com.santimattius.kmp.skeleton.features.home.HomeViewModel
-import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val homeModule = module {

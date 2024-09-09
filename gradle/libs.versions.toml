@@ -1,33 +1,33 @@
 [versions]
-agp = "8.5.1"
-kotlin = "2.0.0"
+agp = "8.6.0"
+kotlin = "2.0.20"
 sqldelightVersion = "2.0.2"
 
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
 
-androidx-activityCompose = "1.9.1"
+androidx-activityCompose = "1.9.2"
 androidx-appcompat = "1.7.0"
 androidx-core-ktx = "1.13.1"
 
-compose = "1.6.8"
+compose = "1.7.0"
 compose-plugin = "1.6.11"
 
-lifecycleRuntime = "2.8.4"
+lifecycleRuntime = "2.8.5"
 lifecycleCompose = "2.8.0"
-navigationCompose = "2.8.0-dev1731"
+navigationCompose = "2.8.0-alpha08"
 
-statelyCommon = "2.0.7"
+statelyCommon = "2.1.0"
 coil= "3.0.0-alpha08"
 
-koin = "3.6.0-alpha3"
-koinComposeMultiplatform = "1.2.0-Beta5"
+koin = "4.0.0-RC2"
+koinComposeMultiplatform = "4.0.0-RC2"
 
 kotlinxCoroutinesAndroid = "1.8.1"
 ktorVersion = "2.3.12"
 
-uiAndroid = "1.6.8"
+uiAndroid = "1.7.0"
 startupRuntime = "1.1.1"
 
 [libraries]
