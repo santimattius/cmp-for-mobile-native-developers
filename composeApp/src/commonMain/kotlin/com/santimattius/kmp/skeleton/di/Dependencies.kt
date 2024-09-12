@@ -15,6 +15,7 @@ val homeModule = module {
             removeFromFavorite = get()
         )
     }
+
     viewModel {
         FavoritesViewModel(characterRepository = get())
     }

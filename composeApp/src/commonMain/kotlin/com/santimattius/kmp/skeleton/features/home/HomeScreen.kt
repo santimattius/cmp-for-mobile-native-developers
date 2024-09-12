@@ -31,10 +31,8 @@ import com.santimattius.kmp.skeleton.core.ui.components.Center
 import com.santimattius.kmp.skeleton.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.skeleton.core.ui.components.NetworkImage
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreenRoute() {
     val viewModel = koinViewModel<HomeViewModel>()
