@@ -31,11 +31,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
-import org.koin.compose.viewmodel.koinViewModel
+import org.kodein.di.compose.localDI
+import org.kodein.di.instance
 
 @Composable
 fun FavoriteRoute() {
-    val viewModel = koinViewModel<FavoritesViewModel>()
+    val di = localDI()
+    val viewModel: FavoritesViewModel by di.instance()
     FavoritesScreen(
         viewModel = viewModel,
         onFavoriteClick = viewModel::addToFavorites,
@@ -69,7 +71,7 @@ fun FavoritesScreen(
 private fun ListOfFavorites(
     characters: List<Character>,
     onClick: (Character) -> Unit = {},
-    onFavoriteClick: (Character) -> Unit = {}
+    onFavoriteClick: (Character) -> Unit = {},
 ) {
     LazyColumn(
         contentPadding = PaddingValues(2.dp),
@@ -85,7 +87,7 @@ private fun ListOfFavorites(
 private fun FavoriteRowItem(
     onClick: (Character) -> Unit,
     character: Character,
-    onFavoriteClick: (Character) -> Unit
+    onFavoriteClick: (Character) -> Unit,
 ) {
     ListItem(
         modifier = Modifier.clickable { onClick(character) },
@@ -114,7 +116,7 @@ private fun CircularAvatar(
     image: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    size: Dp = 40.dp
+    size: Dp = 40.dp,
 ) {
     Box(
         modifier = modifier

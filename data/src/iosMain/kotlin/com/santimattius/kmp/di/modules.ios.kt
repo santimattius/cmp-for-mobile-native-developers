@@ -2,10 +2,10 @@ package com.santimattius.kmp.di
 
 import app.cash.sqldelight.db.SqlDriver
 import com.santimattius.kmp.data.db.DriverFactory
-import org.koin.core.module.Module
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindSingleton
 
-actual val platformModule: Module
-    get() = module {
-        single<SqlDriver> { DriverFactory().createDriver() }
+actual val platformModule: DI.Module
+    get() = DI.Module("PlatformModule") {
+        bindSingleton<SqlDriver> { DriverFactory().createDriver() }
     }

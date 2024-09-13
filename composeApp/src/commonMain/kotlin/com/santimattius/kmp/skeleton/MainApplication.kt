@@ -18,18 +18,12 @@ import com.santimattius.kmp.skeleton.di.applicationModules
 import com.santimattius.kmp.skeleton.navigation.Features
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.KoinApplication
-import org.koin.dsl.koinApplication
+import org.kodein.di.compose.withDI
 
-fun koinConfiguration() = koinApplication {
-    modules(applicationModules())
-}
 
 @Composable
-fun MainApplication() {
-    KoinApplication(application = ::koinConfiguration) {
-        RootScreen()
-    }
+fun MainApplication() = withDI(*applicationModules().toTypedArray()) {
+    RootScreen()
 }
 
 @Composable
