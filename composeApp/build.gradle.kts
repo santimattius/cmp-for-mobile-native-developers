@@ -40,7 +40,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
 
-            implementation(libs.koin.android)
+//            implementation(libs.koin.android)
         }
         val commonMain by getting {
             dependencies {
@@ -61,9 +61,15 @@ kotlin {
                 implementation(libs.navigation.compose)
                 implementation(libs.androidx.lifecycle.runtime)
 
-                api(libs.koin.core)
-                api(libs.koin.compose)
-                api(libs.koin.composeViewModel)
+//                api(libs.koin.core)
+//                api(libs.koin.compose)
+//                api(libs.koin.composeViewModel)
+
+
+
+                implementation(libs.kodein.di.framework.compose)
+
+
 
                 implementation(projects.data)
             }

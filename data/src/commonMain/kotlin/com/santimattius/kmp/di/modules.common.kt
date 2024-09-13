@@ -15,32 +15,33 @@ import com.santimattius.kmp.domain.GetAllCharacters
 import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
 import io.ktor.client.HttpClient
-import org.koin.core.module.Module
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindFactory
+import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
-val coreModule = module {
-    single<HttpClient> { apiClient("https://rickandmortyapi.com") }
+val coreModule by DI.Module("CoreModule") {
+    bindSingleton { apiClient("https://rickandmortyapi.com") }
 }
 
-val sharedModule = module {
-    single<CharacterNetworkDataSource> { KtorCharacterNetworkDataSource(get<HttpClient>()) }
-    single<CharactersDatabase> { createDatabase(get<SqlDriver>()) }
-    single<CharacterLocalDataSource> { SQLDelightCharacterLocalDataSource(db = get<CharactersDatabase>()) }
-    single {
+val sharedModule by DI.Module("SharedModule") {
+    bindSingleton { KtorCharacterNetworkDataSource(instance<HttpClient>()) }
+    bindSingleton { createDatabase(instance<SqlDriver>()) }
+    bindSingleton { SQLDelightCharacterLocalDataSource(db = instance<CharactersDatabase>()) }
+    bindSingleton {
         CharacterRepository(
-            local = get<CharacterLocalDataSource>(),
-            network = get<CharacterNetworkDataSource>()
+            local = instance<CharacterLocalDataSource>(),
+            network = instance<CharacterNetworkDataSource>()
         )
     }
+    bindFactory<Unit, GetAllCharacters> { GetAllCharacters(instance<CharacterRepository>()) }
+    bindFactory<Unit, FindCharacterById> { FindCharacterById(instance<CharacterRepository>()) }
+    bindFactory<Unit, RefreshCharacters> { RefreshCharacters(instance<CharacterRepository>()) }
 
-    factory<GetAllCharacters> { GetAllCharacters(get<CharacterRepository>()) }
-    factory<FindCharacterById> { FindCharacterById(get<CharacterRepository>()) }
-    factory<RefreshCharacters> { RefreshCharacters(get<CharacterRepository>()) }
-
-    factory { AddToFavorite(get<CharacterRepository>()) }
-    factory { RemoveFromFavorites(get<CharacterRepository>()) }
+    bindFactory<Unit, AddToFavorite> { AddToFavorite(instance<CharacterRepository>()) }
+    bindFactory<Unit, RemoveFromFavorites> { RemoveFromFavorites(instance<CharacterRepository>()) }
 }
 
-expect val platformModule: Module
+expect val platformModule: DI.Module
 
 fun dataModule() = listOf(sharedModule, coreModule, platformModule)

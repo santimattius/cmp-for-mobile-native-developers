@@ -44,15 +44,13 @@ kotlin {
 
             implementation(libs.sqldelight.coroutines.extensions)
 
-            implementation(libs.koin.core)
-
+            implementation (libs.kodein.di)
         }
 
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.android.driver)
-            implementation(libs.koin.android)
             implementation(libs.androidx.startup.runtime)
         }
 
