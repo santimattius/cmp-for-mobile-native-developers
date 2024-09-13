@@ -15,33 +15,86 @@ import com.santimattius.kmp.domain.GetAllCharacters
 import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
 import io.ktor.client.HttpClient
-import org.kodein.di.DI
-import org.kodein.di.bindFactory
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.internal.SynchronizedObject
+import kotlinx.coroutines.internal.synchronized
+import kotlin.native.concurrent.ThreadLocal
 
-val coreModule by DI.Module("CoreModule") {
-    bindSingleton { apiClient("https://rickandmortyapi.com") }
-}
 
-val sharedModule by DI.Module("SharedModule") {
-    bindSingleton { KtorCharacterNetworkDataSource(instance<HttpClient>()) }
-    bindSingleton { createDatabase(instance<SqlDriver>()) }
-    bindSingleton { SQLDelightCharacterLocalDataSource(db = instance<CharactersDatabase>()) }
-    bindSingleton {
-        CharacterRepository(
-            local = instance<CharacterLocalDataSource>(),
-            network = instance<CharacterNetworkDataSource>()
-        )
+@ThreadLocal
+@OptIn(InternalCoroutinesApi::class)
+object CoreModule : SynchronizedObject() {
+
+    private var httpClient: HttpClient? = null
+
+    @OptIn(InternalCoroutinesApi::class)
+    fun httpClient(): HttpClient {
+        synchronized(this) {
+            return httpClient ?: apiClient("https://rickandmortyapi.com").also { httpClient = it }
+        }
     }
-    bindFactory<Unit, GetAllCharacters> { GetAllCharacters(instance<CharacterRepository>()) }
-    bindFactory<Unit, FindCharacterById> { FindCharacterById(instance<CharacterRepository>()) }
-    bindFactory<Unit, RefreshCharacters> { RefreshCharacters(instance<CharacterRepository>()) }
-
-    bindFactory<Unit, AddToFavorite> { AddToFavorite(instance<CharacterRepository>()) }
-    bindFactory<Unit, RemoveFromFavorites> { RemoveFromFavorites(instance<CharacterRepository>()) }
 }
 
-expect val platformModule: DI.Module
+expect val sqlDriver: SqlDriver
 
-fun dataModule() = listOf(sharedModule, coreModule, platformModule)
+@ThreadLocal
+@OptIn(InternalCoroutinesApi::class)
+object SharedModule : SynchronizedObject() {
+    private var db: CharactersDatabase? = null
+    private var remoteDataSource: CharacterNetworkDataSource? = null
+    private var localDataSource: CharacterLocalDataSource? = null
+
+
+    private var repository: CharacterRepository? = null
+
+    fun provideGetAllCharacters(): GetAllCharacters {
+        return GetAllCharacters(repository())
+    }
+
+    fun provideFindCharacterById(): FindCharacterById {
+        return FindCharacterById(repository())
+    }
+
+    fun provideRefreshCharacters(): RefreshCharacters {
+        return RefreshCharacters(repository())
+    }
+
+    fun provideAddToFavorite(): AddToFavorite {
+        return AddToFavorite(repository())
+    }
+
+    fun provideRemoveFromFavorites(): RemoveFromFavorites {
+        return RemoveFromFavorites(repository())
+    }
+
+    private fun remoteDataSource(): CharacterNetworkDataSource {
+        synchronized(this) {
+            return remoteDataSource
+                ?: KtorCharacterNetworkDataSource(CoreModule.httpClient()).also {
+                    remoteDataSource = it
+                }
+        }
+    }
+
+    private fun localDataSource(): CharacterLocalDataSource {
+        synchronized(this) {
+            return localDataSource ?: SQLDelightCharacterLocalDataSource(db()).also {
+                localDataSource = it
+            }
+        }
+    }
+
+    fun db(): CharactersDatabase {
+        synchronized(this) {
+            return db ?: createDatabase(sqlDriver).also { db = it }
+        }
+    }
+
+    fun repository(): CharacterRepository {
+        synchronized(this) {
+            return repository ?: CharacterRepository(localDataSource(), remoteDataSource()).also {
+                repository = it
+            }
+        }
+    }
+}

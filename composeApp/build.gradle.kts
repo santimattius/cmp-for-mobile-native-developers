@@ -59,8 +59,6 @@ kotlin {
                 implementation(libs.navigation.compose)
                 implementation(libs.androidx.lifecycle.runtime)
 
-                implementation(libs.kodein.di.framework.compose)
-
                 implementation(projects.data)
             }
         }

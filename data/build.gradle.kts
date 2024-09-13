@@ -44,7 +44,6 @@ kotlin {
 
             implementation(libs.sqldelight.coroutines.extensions)
 
-            implementation (libs.kodein.di)
         }
 
         androidMain.dependencies {

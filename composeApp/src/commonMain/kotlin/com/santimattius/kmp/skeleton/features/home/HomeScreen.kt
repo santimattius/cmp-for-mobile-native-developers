@@ -26,18 +26,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
 import com.santimattius.kmp.skeleton.core.ui.components.LoadingIndicator
 import com.santimattius.kmp.skeleton.core.ui.components.NetworkImage
-import org.kodein.di.compose.localDI
-import org.kodein.di.instance
-
+import com.santimattius.kmp.skeleton.di.LocalAppModule
 
 @Composable
 fun HomeScreenRoute() {
-    val di = localDI()
-    val viewModel: HomeViewModel by di.instance()
+    val appModule = LocalAppModule.current
+    val viewModel: HomeViewModel = viewModel { appModule.createHomeViewModel() }
+
     HomeScreenContent(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
         viewModel = viewModel,

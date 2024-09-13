@@ -1,26 +1,35 @@
 package com.santimattius.kmp.skeleton.di
 
-import com.santimattius.kmp.di.dataModule
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import com.santimattius.kmp.di.SharedModule
 import com.santimattius.kmp.skeleton.features.favorites.FavoritesViewModel
 import com.santimattius.kmp.skeleton.features.home.HomeViewModel
-import org.kodein.di.DI
-import org.kodein.di.bindFactory
-import org.kodein.di.instance
 
-val appModule = DI.Module("AppModule") {
-    bindFactory<Unit, HomeViewModel> {
-        HomeViewModel(
-            getAllCharacters = instance(),
-            refreshCharacters = instance(),
-            addToFavorite = instance(),
-            removeFromFavorite = instance()
+object AppModule {
+    fun createHomeViewModel(): HomeViewModel {
+        return HomeViewModel(
+            getAllCharacters = SharedModule.provideGetAllCharacters(),
+            refreshCharacters = SharedModule.provideRefreshCharacters(),
+            addToFavorite = SharedModule.provideAddToFavorite(),
+            removeFromFavorite = SharedModule.provideRemoveFromFavorites()
         )
     }
 
-    bindFactory<Unit, FavoritesViewModel> {
-        FavoritesViewModel(characterRepository = instance())
+    fun createFavoritesViewModel(): FavoritesViewModel {
+        return FavoritesViewModel(
+            characterRepository = SharedModule.repository()
+        )
     }
 }
 
 
-fun applicationModules() = listOf(appModule) + dataModule()
+val LocalAppModule = staticCompositionLocalOf<AppModule> {
+    error("LocalAppModule not provided")
+}
+
+@Composable
+fun DiContainer(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalAppModule provides AppModule, content)
+}

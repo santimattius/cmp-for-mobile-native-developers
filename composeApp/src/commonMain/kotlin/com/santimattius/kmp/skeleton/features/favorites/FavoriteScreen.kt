@@ -28,16 +28,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.santimattius.kmp.domain.Character
 import com.santimattius.kmp.skeleton.core.ui.components.Center
-import org.kodein.di.compose.localDI
-import org.kodein.di.instance
+import com.santimattius.kmp.skeleton.di.LocalAppModule
 
 @Composable
 fun FavoriteRoute() {
-    val di = localDI()
-    val viewModel: FavoritesViewModel by di.instance()
+    val appModule = LocalAppModule.current
+    val viewModel: FavoritesViewModel = viewModel { appModule.createFavoritesViewModel() }
     FavoritesScreen(
         viewModel = viewModel,
         onFavoriteClick = viewModel::addToFavorites,

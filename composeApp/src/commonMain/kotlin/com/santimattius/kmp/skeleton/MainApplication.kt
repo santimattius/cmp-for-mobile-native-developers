@@ -14,16 +14,17 @@ import cmp_for_mobile_native_developers.composeapp.generated.resources.app_name
 import com.santimattius.kmp.skeleton.core.ui.components.AppBar
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIcon
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
-import com.santimattius.kmp.skeleton.di.applicationModules
+import com.santimattius.kmp.skeleton.di.DiContainer
 import com.santimattius.kmp.skeleton.navigation.Features
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
-import org.kodein.di.compose.withDI
 
 
 @Composable
-fun MainApplication() = withDI(*applicationModules().toTypedArray()) {
-    RootScreen()
+fun MainApplication() {
+    DiContainer {
+        RootScreen()
+    }
 }
 
 @Composable
