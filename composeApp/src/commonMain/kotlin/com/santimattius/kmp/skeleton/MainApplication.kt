@@ -19,15 +19,10 @@ import com.santimattius.kmp.skeleton.navigation.Features
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
-import org.koin.dsl.koinApplication
-
-fun koinConfiguration() = koinApplication {
-    modules(applicationModules())
-}
 
 @Composable
 fun MainApplication() {
-    KoinApplication(application = ::koinConfiguration) {
+    KoinApplication(application = { modules(applicationModules()) }) {
         RootScreen()
     }
 }

@@ -6,12 +6,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.santimattius.kmp.entertainment.core.ui.themes.Pink40
-import com.santimattius.kmp.entertainment.core.ui.themes.Pink80
-import com.santimattius.kmp.entertainment.core.ui.themes.Purple40
-import com.santimattius.kmp.entertainment.core.ui.themes.Purple80
-import com.santimattius.kmp.entertainment.core.ui.themes.PurpleGrey40
-import com.santimattius.kmp.entertainment.core.ui.themes.PurpleGrey80
 import com.santimattius.kmp.entertainment.core.ui.themes.Typography
 
 private val DarkColorScheme = darkColorScheme(
