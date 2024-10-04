@@ -11,6 +11,7 @@ import com.santimattius.kmp.domain.RemoveFromFavorites
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,9 @@ class HomeViewModel(
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = getAllCharacters()
+        .onStart {
+            refresh()
+        }
         .map {
             HomeUiState(
                 isLoading = false,
@@ -40,10 +44,6 @@ class HomeViewModel(
             started = SharingStarted.WhileSubscribed(5000L),
             initialValue = HomeUiState(isLoading = true)
         )
-
-    init {
-        refresh()
-    }
 
     private fun refresh() {
         viewModelScope.launch {
