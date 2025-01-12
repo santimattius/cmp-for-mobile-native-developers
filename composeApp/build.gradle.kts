@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -7,7 +10,10 @@ plugins {
 }
 
 kotlin {
+    applyDefaultHierarchyTemplate()
     androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
         compilations.all {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_11.toString()
@@ -42,44 +48,44 @@ kotlin {
 
             implementation(libs.koin.android)
         }
-        val commonMain by getting {
-            dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
 
-                implementation(libs.coil.compose)
-                implementation(libs.coil.network)
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
 
-                implementation(libs.stately.common)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
 
-                implementation(libs.lifecycle.viewmodel.compose)
-                implementation(libs.lifecycle.runtime.compose)
-                implementation(libs.navigation.compose)
-                implementation(libs.androidx.lifecycle.runtime)
+            implementation(libs.stately.common)
 
-                api(libs.koin.core)
-                api(libs.koin.compose)
-                api(libs.koin.composeViewModel)
+            implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.lifecycle.runtime.compose)
+            implementation(libs.navigation.compose)
+            implementation(libs.androidx.lifecycle.runtime)
 
-                implementation(projects.data)
-            }
+            api(libs.koin.core)
+            api(libs.koin.compose)
+            api(libs.koin.composeViewModel)
+
+            implementation(projects.data)
         }
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.koin.test)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -102,6 +108,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -118,10 +125,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     dependencies {
+        implementation(libs.androidx.ui.android)
         debugImplementation(libs.compose.ui.tooling)
+        debugImplementation(libs.compose.ui.test.manifest)
+        androidTestImplementation(libs.compose.ui.test.junit4.android)
     }
 }
-dependencies {
-    implementation(libs.androidx.ui.android)
-}
-
