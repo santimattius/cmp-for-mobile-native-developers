@@ -1,7 +1,12 @@
 package com.santimattius.kmp.skeleton.navigation
 
-enum class Features(val route: String) {
-    Splash(route = "/splash"),
-    Home(route = "/home"),
-    Favorites(route = "/favorites")
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Splash
+
+@Serializable
+object Home
+
+@Serializable
+object Favorites

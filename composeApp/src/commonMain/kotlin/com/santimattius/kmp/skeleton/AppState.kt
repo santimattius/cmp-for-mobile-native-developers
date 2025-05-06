@@ -8,9 +8,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.santimattius.kmp.skeleton.navigation.Features
+import com.santimattius.kmp.skeleton.navigation.Home
+import com.santimattius.kmp.skeleton.navigation.Splash
 import com.santimattius.kmp.skeleton.navigation.navigatePoppingUpToStartDestination
 import kotlinx.coroutines.CoroutineScope
+import kotlin.reflect.KClass
 
 @Composable
 fun rememberAppState(
@@ -28,7 +30,7 @@ class AppState(
 ) {
 
     companion object {
-        val HOME_ROUTES = listOf(Features.Home.route)
+        val HOME_ROUTES = listOf(Home::class.qualifiedName)
     }
 
     private val currentRoute: String
@@ -39,22 +41,22 @@ class AppState(
         @Composable get() = !HOME_ROUTES.contains(currentRoute)
 
     val showTopAppBar: Boolean
-        @Composable get() = currentRoute.notContainsRoute(Features.Splash)
+        @Composable get() = currentRoute.notContainsRoute(Splash::class)
 
 
     fun onUpClick() {
         navController.popBackStack()
     }
 
-    private fun String.notContainsRoute(feature: Features): Boolean {
+    private fun <T : Any> String.notContainsRoute(clazz: KClass<T>): Boolean {
         return if (isBlank()) {
             false
         } else {
-            !contains(feature.route)
+            !contains(clazz.qualifiedName.orEmpty())
         }
     }
 
-    fun onNavItemClick(feature: Features) {
-        navController.navigatePoppingUpToStartDestination(feature.route)
+     fun onNavItemClick(feature: Any) {
+        navController.navigatePoppingUpToStartDestination(feature)
     }
 }

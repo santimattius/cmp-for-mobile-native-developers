@@ -1,8 +1,8 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 kotlin = "2.1.20"
 sqldelightVersion = "2.0.2"
-compose-plugin = "1.7.3"
+compose-plugin = "1.8.0"
 
 android-compileSdk = "35"
 android-minSdk = "24"
@@ -13,15 +13,16 @@ androidx-appcompat = "1.7.0"
 androidx-core-ktx = "1.16.0"
 
 compose = "1.8.0"
+materialIconsCore = "1.7.3"
 
 lifecycleRuntime = "2.8.7"
-lifecycleCompose = "2.8.4"
-navigationCompose = "2.8.0-alpha11"
+lifecycleCompose = "2.9.0-beta01"
+navigationCompose = "2.9.0-beta01"
 
 statelyCommon = "2.1.0"
 coil = "3.1.0"
 
-koin = "4.0.4"
+koin = "4.1.0-Beta8"
 
 kotlinxCoroutinesAndroid = "1.10.2"
 ktorVersion = "3.1.2"
@@ -40,6 +41,7 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 #Compose Multiplatform
+material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleCompose" }
 lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleCompose" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

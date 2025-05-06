@@ -1,12 +1,14 @@
 package com.santimattius.kmp.skeleton.core.ui.themes
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.santimattius.kmp.entertainment.core.ui.themes.Typography
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -33,4 +35,17 @@ fun AppTheme(
         typography = Typography,
         content = content
     )
+}
+
+
+@Composable
+fun AppThemeContainer(content: @Composable () -> Unit,){
+    AppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            content()
+        }
+    }
 }

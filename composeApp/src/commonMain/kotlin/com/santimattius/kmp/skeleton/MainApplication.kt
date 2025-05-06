@@ -1,6 +1,5 @@
 package com.santimattius.kmp.skeleton
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -14,17 +13,15 @@ import cmp_for_mobile_native_developers.composeapp.generated.resources.app_name
 import com.santimattius.kmp.skeleton.core.ui.components.AppBar
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIcon
 import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
-import com.santimattius.kmp.skeleton.di.applicationModules
-import com.santimattius.kmp.skeleton.navigation.Features
+import com.santimattius.kmp.skeleton.navigation.Favorites
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.KoinApplication
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun MainApplication() {
-    KoinApplication(application = { modules(applicationModules()) }) {
-        RootScreen()
-    }
+
 }
 
 @Composable
@@ -47,7 +44,7 @@ fun RootScreen(appState: AppState = rememberAppState()) {
                                 icon = Icons.Default.Favorite,
                                 contentDescription = "Favorite",
                                 action = {
-                                    appState.onNavItemClick(Features.Favorites)
+                                    appState.onNavItemClick(Favorites)
                                 }
                             )
                         )
@@ -56,8 +53,9 @@ fun RootScreen(appState: AppState = rememberAppState()) {
             }
         }
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-            Navigation(appState.navController)
-        }
+        Navigation(
+            modifier = Modifier.fillMaxSize().padding(padding),
+            navController = appState.navController
+        )
     }
 }

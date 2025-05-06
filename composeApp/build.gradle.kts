@@ -56,6 +56,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.material.icons.core)
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network)

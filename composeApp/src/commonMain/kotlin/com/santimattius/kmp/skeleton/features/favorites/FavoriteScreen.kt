@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,7 +50,9 @@ fun FavoritesScreen(
 ) {
     val data by viewModel.characters.collectAsStateWithLifecycle()
     if (data.isEmpty()) {
-        Center {
+        Center(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
             Text(
                 text = "There is no favorite content",
                 style = MaterialTheme.typography.headlineSmall
@@ -58,6 +60,7 @@ fun FavoritesScreen(
         }
     } else {
         ListOfFavorites(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             characters = data,
             onClick = onClick,
             onFavoriteClick = onFavoriteClick
@@ -67,13 +70,14 @@ fun FavoritesScreen(
 
 @Composable
 private fun ListOfFavorites(
+    modifier: Modifier = Modifier,
     characters: List<Character>,
     onClick: (Character) -> Unit = {},
     onFavoriteClick: (Character) -> Unit = {}
 ) {
     LazyColumn(
         contentPadding = PaddingValues(2.dp),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 16.dp)
+        modifier = modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 16.dp)
     ) {
         items(characters, key = { it.id }) { character ->
             FavoriteRowItem(onClick, character, onFavoriteClick)

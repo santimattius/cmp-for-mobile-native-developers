@@ -1,8 +1,10 @@
 package com.santimattius.kmp.skeleton.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.santimattius.kmp.skeleton.features.favorites.FavoriteRoute
 import com.santimattius.kmp.skeleton.features.home.HomeScreenRoute
@@ -10,31 +12,27 @@ import com.santimattius.kmp.skeleton.features.splash.SplashScreen
 
 @Composable
 fun Navigation(
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
+        modifier = modifier,
         navController = navController,
-        startDestination = Features.Splash.route
+        startDestination = Splash
     ) {
-        composable(
-            features = Features.Splash
-        ) {
+        composable<Splash> {
             SplashScreen {
                 with(navController) {
                     popBackStack()
-                    navigate(Features.Home.route)
+                    navigate(Home)
                 }
             }
         }
-        composable(
-            features = Features.Home,
-        ) {
+        composable<Home> {
             HomeScreenRoute()
         }
 
-        composable(
-            features = Features.Favorites
-        ) {
+        composable<Favorites> {
             FavoriteRoute()
         }
     }

@@ -1,4 +1,4 @@
-package com.santimattius.kmp.entertainment.core.ui.themes
+package com.santimattius.kmp.skeleton.core.ui.themes
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
