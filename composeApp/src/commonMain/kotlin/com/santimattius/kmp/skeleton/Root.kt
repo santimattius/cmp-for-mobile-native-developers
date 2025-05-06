@@ -16,13 +16,6 @@ import com.santimattius.kmp.skeleton.core.ui.components.AppBarIconModel
 import com.santimattius.kmp.skeleton.navigation.Favorites
 import com.santimattius.kmp.skeleton.navigation.Navigation
 import org.jetbrains.compose.resources.stringResource
-import org.koin.core.annotation.KoinExperimentalAPI
-
-@OptIn(KoinExperimentalAPI::class)
-@Composable
-fun MainApplication() {
-
-}
 
 @Composable
 fun RootScreen(appState: AppState = rememberAppState()) {
