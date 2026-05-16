@@ -1,17 +1,19 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.sqldelight)
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_11.toString()
-            }
-        }
+    android {
+        namespace = "com.santimattius.kmp.skeleton.shared"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+
+    compilerOptions {
+        verbose.set(true)
     }
 
     listOf(
@@ -26,14 +28,6 @@ kotlin {
         }
     }
 
-    targets.all {
-        compilations.all {
-            kotlinOptions {
-                verbose = true
-            }
-        }
-    }
-
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -45,7 +39,6 @@ kotlin {
             implementation(libs.sqldelight.coroutines.extensions)
 
             implementation(libs.koin.core)
-
         }
 
         androidMain.dependencies {
@@ -59,7 +52,6 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.ios.driver)
-
         }
     }
 }
@@ -68,22 +60,8 @@ sqldelight {
     databases {
         create("CharactersDatabase") {
             packageName.set("com.santimattius.kmp")
-            dialect("app.cash.sqldelight:sqlite-3-38-dialect:2.0.2")
+            dialect("app.cash.sqldelight:sqlite-3-38-dialect:${libs.versions.sqldelightVersion.get()}")
         }
     }
-
     linkSqlite.set(true)
-
-}
-
-android {
-    namespace = "com.santimattius.kmp.skeleton.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
 }

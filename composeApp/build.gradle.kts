@@ -1,9 +1,6 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinSerialization)
@@ -11,18 +8,16 @@ plugins {
 
 kotlin {
     applyDefaultHierarchyTemplate()
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_11.toString()
-            }
-        }
+
+    android {
+        namespace = "com.santimattius.kmp.compose"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        androidResources { enable = true }
+        withHostTest { }
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -34,10 +29,8 @@ kotlin {
     }
 
     sourceSets {
-
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
 
             api(libs.androidx.activity.compose)
             api(libs.androidx.appcompat)
@@ -75,7 +68,6 @@ kotlin {
             implementation(projects.data)
         }
 
-
         commonTest.dependencies {
             implementation(kotlin("test"))
 
@@ -85,6 +77,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.test)
         }
+
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
@@ -92,43 +85,10 @@ kotlin {
 }
 
 composeCompiler {
-    enableStrongSkippingMode = true
+    featureFlags.set(setOf(org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.StrongSkipping))
 }
 
-android {
-    namespace = "com.santimattius.kmp.compose"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
-    defaultConfig {
-        applicationId = "com.santimattius.kmp.compose"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    dependencies {
-        implementation(libs.androidx.ui.android)
-        debugImplementation(libs.compose.ui.tooling)
-        debugImplementation(libs.compose.ui.test.manifest)
-        androidTestImplementation(libs.compose.ui.test.junit4.android)
-    }
+dependencies {
+    androidRuntimeClasspath(libs.compose.ui.tooling)
+    androidRuntimeClasspath(libs.androidx.ui.android)
 }

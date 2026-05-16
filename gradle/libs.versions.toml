@@ -1,33 +1,33 @@
 [versions]
-agp = "8.9.2"
-kotlin = "2.1.20"
-sqldelightVersion = "2.0.2"
-compose-plugin = "1.8.0"
+agp = "9.2.1"
+kotlin = "2.3.21"
+sqldelightVersion = "2.3.2"
+compose-plugin = "1.11.0"
 
-android-compileSdk = "35"
+android-compileSdk = "37"
 android-minSdk = "24"
-android-targetSdk = "35"
+android-targetSdk = "37"
 
-androidx-activityCompose = "1.10.1"
-androidx-appcompat = "1.7.0"
-androidx-core-ktx = "1.16.0"
+androidx-activityCompose = "1.13.0"
+androidx-appcompat = "1.7.1"
+androidx-core-ktx = "1.18.0"
 
-compose = "1.8.0"
+compose = "1.11.1"
 materialIconsCore = "1.7.3"
 
-lifecycleRuntime = "2.8.7"
-lifecycleCompose = "2.9.0-beta01"
-navigationCompose = "2.9.0-beta01"
+lifecycleRuntime = "2.10.0"
+lifecycleCompose = "2.10.0"
+navigationCompose = "2.9.2"
 
 statelyCommon = "2.1.0"
-coil = "3.1.0"
+coil = "3.4.0"
 
-koin = "4.1.0-Beta8"
+koin = "4.2.1"
 
-kotlinxCoroutinesAndroid = "1.10.2"
-ktorVersion = "3.1.2"
+kotlinxCoroutinesAndroid = "1.11.0"
+ktorVersion = "3.5.0"
 
-uiAndroid = "1.8.0"
+uiAndroid = "1.11.1"
 startupRuntime = "1.2.0"
 
 [libraries]
@@ -79,6 +79,7 @@ androidx-startup-runtime = { module = "androidx.startup:startup-runtime", versio
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
