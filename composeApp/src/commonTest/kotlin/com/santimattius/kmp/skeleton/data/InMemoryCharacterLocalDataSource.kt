@@ -43,9 +43,16 @@ class InMemoryCharacterLocalDataSource(
 
     override suspend fun insertAll(characters: List<Character>): Result<Unit> = runCatching {
         mutex.withLock {
-            val currentCharacters = _characters.value.toMutableList()
-            currentCharacters.addAll(characters)
-            _characters.value = currentCharacters
+            val current = _characters.value.associateBy { it.id }.toMutableMap()
+            characters.forEach { incoming ->
+                val existing = current[incoming.id]
+                current[incoming.id] = if (existing != null) {
+                    existing.copy(name = incoming.name, image = incoming.image)
+                } else {
+                    incoming
+                }
+            }
+            _characters.value = current.values.toList()
         }
     }
 

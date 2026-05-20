@@ -2,28 +2,45 @@ package com.santimattius.kmp.skeleton.features.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.santimattius.kmp.data.CharacterRepository
+import com.santimattius.kmp.domain.AddToFavorite
 import com.santimattius.kmp.domain.Character
+import com.santimattius.kmp.domain.GetFavoriteCharacters
+import com.santimattius.kmp.domain.RemoveFromFavorites
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
-    private val characterRepository: CharacterRepository,
+    getFavoriteCharacters: GetFavoriteCharacters,
+    private val addToFavorite: AddToFavorite,
+    private val removeFromFavorites: RemoveFromFavorites,
 ) : ViewModel() {
 
-    var characters = characterRepository.allFavoritesCharacters.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(1000L),
-        initialValue = emptyList()
-    )
+    val uiState: StateFlow<FavoritesUiState> = getFavoriteCharacters()
+        .map { characters ->
+            FavoritesUiState(
+                characters = characters,
+                isLoading = false,
+            )
+        }
+        .catch {
+            emit(FavoritesUiState(isLoading = false))
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = FavoritesUiState(isLoading = true),
+        )
 
-    fun addToFavorites(character: Character) {
+    fun toggleFavorite(character: Character) {
         viewModelScope.launch {
             if (character.isFavorite) {
-                characterRepository.removeFromFavorite(character.id)
+                removeFromFavorites(character.id)
             } else {
-                characterRepository.addToFavorite(character.id)
+                addToFavorite(character.id)
             }
         }
     }

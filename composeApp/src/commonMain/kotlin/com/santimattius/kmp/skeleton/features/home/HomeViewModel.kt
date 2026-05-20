@@ -1,6 +1,5 @@
 package com.santimattius.kmp.skeleton.features.home
 
-import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santimattius.kmp.domain.AddToFavorite
@@ -10,17 +9,11 @@ import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-@Stable
-data class HomeUiState(
-    val isLoading: Boolean = false,
-    val hasError: Boolean = false,
-    val data: List<Character> = emptyList(),
-)
 
 class HomeViewModel(
     getAllCharacters: GetAllCharacters,
@@ -30,28 +23,30 @@ class HomeViewModel(
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = getAllCharacters()
-        .onStart {
-            refresh()
-        }
-        .map {
+        .onStart { refresh() }
+        .map { characters ->
             HomeUiState(
                 isLoading = false,
-                hasError = false,
-                data = it
+                characters = characters,
+                error = null,
             )
-        }.stateIn(
+        }
+        .catch { throwable ->
+            emit(HomeUiState(error = throwable.message ?: "Unknown error"))
+        }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = HomeUiState(isLoading = true)
+            initialValue = HomeUiState(isLoading = true),
         )
 
-    private fun refresh() {
+    fun refresh() {
         viewModelScope.launch {
             refreshCharacters.invoke()
         }
     }
 
-    fun addToFavorites(character: Character) {
+    fun addToFavorite(character: Character) {
         viewModelScope.launch {
             if (character.isFavorite) {
                 removeFromFavorite(character.id)

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Rick and Morty</string>
     <string name="title">Rick and Morty</string>
+    <string name="favorite_icon_description">Favorite</string>
+    <string name="favorites">Favorites</string>
+    <string name="repository_screen_title">Repository</string>
+    <string name="home_open_repository_content_description">Open repository</string>
+    <string name="repository_back_content_description">Back</string>
 </resources>

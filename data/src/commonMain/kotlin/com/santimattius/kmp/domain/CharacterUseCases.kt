@@ -9,6 +9,13 @@ class GetAllCharacters(
     operator fun invoke() = repository.allCharacters
 }
 
+class GetFavoriteCharacters(
+    private val repository: CharacterRepository,
+) {
+
+    operator fun invoke() = repository.allFavoritesCharacters
+}
+
 class FindCharacterById(
     private val repository: CharacterRepository,
 ) {

@@ -4,7 +4,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescriptionExactly
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilExactlyOneExists
 import com.santimattius.kmp.skeleton.di.KoinTestContext
 import com.santimattius.kmp.skeleton.features.home.HomeScreenRoute
@@ -24,7 +24,7 @@ class HomeScreenTest : KoinTest {
         }
         waitUntilExactlyOneExists(
             matcher = hasContentDescriptionExactly("Rick Sanchez"),
-            timeoutMillis = 5000
+            timeoutMillis = 5000,
         )
         onNodeWithContentDescription("Rick Sanchez").assertIsDisplayed()
     }

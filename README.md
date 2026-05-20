@@ -1,71 +1,110 @@
-# CMP for Mobile Native Developers 
+# CMP for Mobile Native Developers
 
-## CMP for Mobile Native Developers: Series
+Companion project for the *CMP for Mobile Native Developers* article series. Targets Android and iOS using Compose Multiplatform.
 
-In this series of articles, we will explore the following aspects of Compose Multiplatform:
+## Module Graph
 
-  - [Part 1: Introduction](https://medium.com/@santimattius/cmp-for-mobile-native-developers-introduction-255f1cf1eebc)
-  - [Part 2: UI](https://medium.com/@santimattius/cmp-for-mobile-native-developers-part-2-ui-fe74f19204ab)
-  - [Part 3: State Holders](https://medium.com/@santimattius/cmp-for-mobile-native-developers-part-3-state-holders-fb2741f11a4f/)
-  - [Part 4: Navigation](https://medium.com/@santimattius/cmp-for-mobile-native-developers-part-4-navigation-318d5036cbe9)
-  - [Part 5: Dependency Injection](https://medium.com/@santimattius/cmp-for-mobile-native-developers-dependency-injection-86b484436c93)
-  - [Part 6: UI Testing](https://medium.com/@santimattius/cmp-for-mobile-native-developers-ui-testing-6a4f00f81548)
-  - [Part 7: Using Native Component](https://medium.com/@santimattius/cmp-for-mobile-native-developers-using-native-components-16bc84a62714)
+```
+:androidApp  ──────────────────► :composeApp
+                                      │
+                                      ▼
+                                   :data
+```
 
-## Project
-This is a Kotlin Multiplatform project targeting Android, iOS.
+| Module | Plugin | Role |
+|--------|--------|------|
+| `:androidApp` | `com.android.application` | Android entry point |
+| `:composeApp` | `com.android.kotlin.multiplatform.library` | Shared UI, screens, ViewModels, navigation, DI |
+| `:data` | `com.android.kotlin.multiplatform.library` | Domain models, use cases, repository, Ktor, SQLDelight |
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-    - `commonMain` is for code that’s common for all targets.
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
-      folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      `iosMain` would be the right folder for such calls.
+## Build Commands
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
-  your project.
+```bash
+# Android
+./gradlew :androidApp:assembleDebug
+./gradlew :androidApp:installDebug
 
-## Prepare the environment
+# iOS — open iosApp/iosApp.xcodeproj in Xcode after building the framework
+./gradlew :composeApp:assembleXCFramework
 
-- Install and configure the latest JDK 17+.
-- If you have Gradle installed, make sure you use Gradle 8.1 or later.
-- Install and configure the latest Android Studio for Android samples.
-- Install and configure the latest Xcode for iOS samples.
+# Compile common tests against iOS Simulator (fast, no device required)
+./gradlew :composeApp:compileTestKotlinIosSimulatorArm64
 
-Use the [KDoctor](https://github.com/Kotlin/kdoctor) tool to ensure that your development
-environment is configured correctly:
+# Run Android instrumented UI tests (requires connected device/emulator)
+./gradlew :androidApp:connectedAndroidTest
 
-1. Install KDoctor with [Homebrew](https://brew.sh/):
+# Run iOS simulator tests
+./gradlew :composeApp:iosSimulatorArm64Test
 
-    ```text
-    brew install kdoctor
-    ```
+# Generate SQLDelight code
+./gradlew :data:generateCommonMainCharactersDatabaseInterface
+```
 
-2. Run KDoctor in your terminal:
+## Chapter-to-Code Mapping
 
-    ```text
-    kdoctor
-    ```
+| # | Chapter | Key Files / Packages |
+|---|---------|----------------------|
+| 1 | Introduction to Compose Multiplatform | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/Root.kt` |
+| 2 | Your First App with CMP | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/features/splash/SplashScreen.kt` |
+| 3 | UI with Compose Multiplatform | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/core/ui/components/` |
+| 4 | Layouts and Responsive Design | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/features/home/HomeScreen.kt` |
+| 5 | Multiplatform Resources | `composeApp/src/commonMain/composeResources/values/values.xml`, `composeApp/src/commonMain/composeResources/values-es/` |
+| 6 | Lifecycle and State Holders | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/features/home/HomeViewModel.kt`, `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/core/arch/Udf.kt` |
+| 7 | Dependency Injection | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/di/Dependencies.kt`, `data/src/commonMain/kotlin/com/santimattius/kmp/di/modules.common.kt` |
+| 8 | Navigation | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/navigation/Navigation.kt`, `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/navigation/Destination.kt` |
+| 9 | Accessibility | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/features/favorites/FavoriteScreen.kt`, `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/core/ui/testing/TestTags.kt` |
+| 10 | UI Testing | `composeApp/src/commonTest/kotlin/com/santimattius/kmp/skeleton/features/home/HomeScreenTest.kt`, `composeApp/src/commonTest/kotlin/com/santimattius/kmp/skeleton/robot/` |
+| 11 | Integration with Native Components | `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/core/ui/components/PlatformWebView.kt`, `composeApp/src/androidMain/kotlin/com/santimattius/kmp/skeleton/core/ui/components/PlatformWebView.kt`, `composeApp/src/iosMain/kotlin/com/santimattius/kmp/skeleton/core/ui/components/PlatformWebView.kt` |
+| 12 | Native Interop Integration Checklist | `docs/chapters/chapter-12-integration-checklist.md`, `composeApp/src/commonMain/kotlin/com/santimattius/kmp/skeleton/core/arch/StateFlowWrapper.kt` |
 
-   If everything is set up correctly, you'll see valid output:
+## Environment Setup
 
-   ```text
-   Environment diagnose (to see all details, use -v option):
-   [✓] Operation System
-   [✓] Java
-   [✓] Android Studio
-   [✓] Xcode
-   [✓] Cocoapods
-   
-   Conclusion:
-     ✓ Your system is ready for Kotlin Multiplatform Mobile development!
-   ```
+Requirements:
+- JDK 17+
+- Gradle 8.10+
+- Android Studio Meerkat or later
+- Xcode 16+
 
-Otherwise, KDoctor will highlight which parts of your setup still need to be configured and will
-suggest a way to fix
-them.
+### KDoctor — Verify Your Environment
 
-Learn more
-about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+Install and run [KDoctor](https://github.com/Kotlin/kdoctor) to check your setup:
+
+```bash
+brew install kdoctor
+kdoctor
+```
+
+Expected output when everything is configured:
+
+```
+Environment diagnose (to see all details, use -v option):
+[✓] Operation System
+[✓] Java
+[✓] Android Studio
+[✓] Xcode
+[✓] Cocoapods
+
+Conclusion:
+  ✓ Your system is ready for Kotlin Multiplatform Mobile development!
+```
+
+### Common KDoctor Issues
+
+| Issue | Fix |
+|-------|-----|
+| Java not found or wrong version | Install JDK 17+ via `brew install openjdk@17`; set `JAVA_HOME` |
+| Android Studio not detected | Open Android Studio once; install KMP plugin |
+| Xcode not found | Install Xcode from the App Store; run `sudo xcode-select --switch /Applications/Xcode.app` |
+| CocoaPods missing | `sudo gem install cocoapods` or `brew install cocoapods` |
+| `iosSimulatorArm64` linker error | Add `-lsqlite3` linker opt (already present in `composeApp/build.gradle.kts`) |
+
+## Stack
+
+| Tool | Version |
+|------|---------|
+| Kotlin Multiplatform | 2.3.21 |
+| Compose Multiplatform | 1.11.0 |
+| AGP | 9.2.1 |
+| Koin | 4.2.1 |
+| Ktor | 3.x |
+| SQLDelight | 2.x |
