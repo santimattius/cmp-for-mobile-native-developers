@@ -12,6 +12,7 @@ import com.santimattius.kmp.data.sources.sqldelight.SQLDelightCharacterLocalData
 import com.santimattius.kmp.domain.AddToFavorite
 import com.santimattius.kmp.domain.FindCharacterById
 import com.santimattius.kmp.domain.GetAllCharacters
+import com.santimattius.kmp.domain.GetFavoriteCharacters
 import com.santimattius.kmp.domain.RefreshCharacters
 import com.santimattius.kmp.domain.RemoveFromFavorites
 import io.ktor.client.HttpClient
@@ -22,25 +23,27 @@ val coreModule = module {
     single<HttpClient> { apiClient("https://rickandmortyapi.com") }
 }
 
-val sharedModule = module {
+val dataModule = module {
     single<CharacterNetworkDataSource> { KtorCharacterNetworkDataSource(get<HttpClient>()) }
     single<CharactersDatabase> { createDatabase(get<SqlDriver>()) }
     single<CharacterLocalDataSource> { SQLDelightCharacterLocalDataSource(db = get<CharactersDatabase>()) }
     single {
         CharacterRepository(
             local = get<CharacterLocalDataSource>(),
-            network = get<CharacterNetworkDataSource>()
+            network = get<CharacterNetworkDataSource>(),
         )
     }
+}
 
+val domainModule = module {
     factory<GetAllCharacters> { GetAllCharacters(get<CharacterRepository>()) }
+    factory<GetFavoriteCharacters> { GetFavoriteCharacters(get<CharacterRepository>()) }
     factory<FindCharacterById> { FindCharacterById(get<CharacterRepository>()) }
     factory<RefreshCharacters> { RefreshCharacters(get<CharacterRepository>()) }
-
     factory { AddToFavorite(get<CharacterRepository>()) }
     factory { RemoveFromFavorites(get<CharacterRepository>()) }
 }
 
 expect val platformModule: Module
 
-fun dataModule() = listOf(sharedModule, coreModule, platformModule)
+fun dataLayerModules() = listOf(coreModule, dataModule, domainModule, platformModule)

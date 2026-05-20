@@ -14,7 +14,9 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         androidResources { enable = true }
-        withHostTest { }
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }
     }
 
     listOf(
@@ -40,6 +42,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
 
             implementation(libs.koin.android)
+
         }
 
         commonMain.dependencies {
@@ -58,7 +61,11 @@ kotlin {
 
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.lifecycle.runtime.compose)
-            implementation(libs.navigation.compose)
+            implementation(libs.navigation3.runtime)
+            implementation(libs.navigation3.ui)
+            implementation(libs.adaptive.navigation3)
+            implementation(libs.adaptive)
+            implementation(libs.koin.compose.navigation3)
             implementation(libs.androidx.lifecycle.runtime)
 
             api(libs.koin.core)
@@ -75,8 +82,10 @@ kotlin {
             implementation(compose.uiTest)
 
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.test)
         }
+
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
